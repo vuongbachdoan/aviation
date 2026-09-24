@@ -171,13 +171,17 @@ function mount(host) {
 
   const camera = new THREE.PerspectiveCamera(30, 1, 0.3, 3000);
   const cur = { pos: V(0, 0, 0), tgt: V(0, 0, 0) }, goal = { pos: V(), tgt: V() };
+  let distMul = 1, compact = false;
   let progress = 0, ready = false, visible = true, raf = 0, last = performance.now(), keyframes = [];
   let airframeMats = [], wheels = {}, legs = [], laser;
 
   const resize = () => {
     const w = host.clientWidth || 1, h = host.clientHeight || 1;
     renderer.setSize(w, h, false); camera.aspect = w / h;
-    camera.fov = w / h < 1 ? 42 : 30; // portrait phones need a wider lens
+    camera.fov = w / h < 1 ? 40 : 30; // portrait phones need a wider lens
+    // keep roughly the same horizontal framing as a 16:9 screen
+    distMul = w / h < 1.2 ? Math.min(2.1, Math.max(1, 0.85 / (w / h))) : 1;
+    compact = w < 560;
     camera.updateProjectionMatrix();
   };
   const ro = new ResizeObserver(resize); ro.observe(host); resize();
@@ -251,7 +255,7 @@ function mount(host) {
     ];
 
     tagsEl.innerHTML = Object.keys(wheels).map(k =>
-      `<div data-tag="${k}" style="position:absolute;left:0;top:0;opacity:0;display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.1em;color:#EEF1F4;background:rgba(13,16,21,.75);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:3px 8px 3px 6px;transform:translate(-50%,-50%)"><span style="width:6px;height:6px;border-radius:50%;background:#${COLORS[wheels[k].risk].toString(16)}"></span>${k.length > 1 ? k : 'POS ' + k}</div>`
+      `<div data-tag="${k}" style="position:absolute;left:0;top:0;opacity:0;display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.1em;color:#EEF1F4;background:rgba(13,16,21,.75);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:3px 8px 3px 6px;white-space:nowrap;transform:translate(-50%,-50%)"><span style="width:6px;height:6px;border-radius:50%;background:#${COLORS[wheels[k].risk].toString(16)}"></span>${k.length > 1 ? k : 'POS ' + k}</div>`
     ).join('');
 
     ready = true;
@@ -283,7 +287,8 @@ function mount(host) {
     sample(p, goal);
     const k = 1 - Math.exp(-dt * 5);
     cur.pos.lerp(goal.pos, k); cur.tgt.lerp(goal.tgt, k);
-    camera.position.copy(cur.pos); camera.lookAt(cur.tgt);
+    camera.position.copy(cur.pos).sub(cur.tgt).multiplyScalar(distMul).add(cur.tgt);
+    camera.lookAt(cur.tgt);
     // slow cruise drift before the dive
     const cruise = 1 - smooth(0.2, 0.4, p);
     camera.position.y += Math.sin(time * 0.5) * 2.5 * cruise;
@@ -312,7 +317,9 @@ function mount(host) {
 
     const scanning = p > 0.43 && p < 0.6;
     status.style.opacity = (Math.sin(Math.PI * clamp((p - 0.42) / 0.2))).toFixed(3);
-    status.textContent = p < 0.53 ? 'SPARTANSE-V VISION · SCANNING 6 WHEELS…' : '6 / 6 SCANNED · 2 FLAGGED';
+    status.style.fontSize = compact ? '10px' : '12px';
+    status.style.letterSpacing = compact ? '.08em' : '.14em';
+    status.textContent = p < 0.53 ? (compact ? 'SCANNING 6 WHEELS…' : 'SPARTANSE-V VISION · SCANNING 6 WHEELS…') : '6 / 6 SCANNED · 2 FLAGGED';
 
     tagsEl.querySelectorAll('[data-tag]').forEach(el => {
       const k = el.dataset.tag, w = wheels[k], below = k === '2' || k === '3' || k === 'NR';
@@ -330,10 +337,17 @@ function mount(host) {
       reticle.style.transform = `translate(${s.x}px,${s.y}px)`;
       reticle.style.color = '#' + COLORS[tgtWheel.risk].toString(16);
       box.style.width = box.style.height = (r * 2) + 'px';
-      const leftSide = s.x > host.clientWidth * 0.5;
-      Object.assign(label.style, leftSide
-        ? { right: (r + 18) + 'px', left: 'auto', top: (-r * 0.6) + 'px' }
-        : { left: (r + 18) + 'px', right: 'auto', top: (-r * 0.6) + 'px' });
+      if (compact) {
+        // narrow screens: pin the label under the reticle, centred and kept on-screen
+        const lw = Math.min(host.clientWidth - 32, 300);
+        const lx = clamp(s.x - lw / 2, 16, host.clientWidth - 16 - lw) - s.x;
+        Object.assign(label.style, { left: lx + 'px', right: 'auto', top: (r + 14) + 'px', width: lw + 'px', whiteSpace: 'normal' });
+      } else {
+        const leftSide = s.x > host.clientWidth * 0.5;
+        Object.assign(label.style, leftSide
+          ? { right: (r + 18) + 'px', left: 'auto', top: (-r * 0.6) + 'px', width: 'auto', whiteSpace: 'nowrap' }
+          : { left: (r + 18) + 'px', right: 'auto', top: (-r * 0.6) + 'px', width: 'auto', whiteSpace: 'nowrap' });
+      }
       label.innerHTML = onPos2
         ? `<div style="color:#F2706A">● POS 2 · MAIN GEAR LH INNER</div><div>CUT DETECTED · 94% CONFIDENCE</div><div style="color:#A7B0BB">Depth 4.1 mm · no dispatch relief</div><div style="color:#F2706A">→ Replace tonight at SGN</div>`
         : `<div style="color:#F2B544">● POS 3 · MAIN GEAR RH INNER</div><div>TREAD 3.2 mm · 38 LANDINGS LEFT</div><div style="color:#A7B0BB">Normal wear · shoulder uneven</div><div style="color:#F2B544">→ Swap at Oct 06 A-check</div>`;

@@ -7,7 +7,7 @@
 <meta name="contact-endpoint" content="/api/contact">
 <script src="./support.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
-<script type="module" src="./plane3d.js"></script>
+<script type="module" src="./plane3d.js?v=20260924d"></script>
 </head>
 <body>
 <x-dc>
@@ -40,8 +40,34 @@ section[id]{scroll-margin-top:72px}
 [data-bar]{transition:transform .35s var(--ease)}
 [data-menu-panel] a{transition:color .2s ease,opacity .35s var(--ease),transform .35s var(--ease)}
 [data-mnav][data-active]{color:#F2B544 !important}
+@media (max-width: 900px){
+  [data-agent-col]{position:static !important}
+}
 @media (max-width: 760px){
+  section[style*="max-width:1240px"], section > div[style*="max-width:1240px"]{padding-left:20px !important;padding-right:20px !important}
+  section[style*="padding:96px 28px"]{padding-top:64px !important;padding-bottom:64px !important}
+  section > div[style*="padding:96px 28px"]{padding-top:64px !important;padding-bottom:64px !important}
+  #top{padding-top:48px !important;padding-bottom:56px !important}
+  [data-hero-stats]{display:grid !important;grid-template-columns:auto auto auto;justify-content:space-between;gap:12px !important}
+  [data-hero-stats] > div > div:first-child{font-size:19px !important;white-space:nowrap}
+  [data-hero-stats] > div > div:last-child{font-size:12px !important}
+  [data-card-head]{flex-wrap:wrap}
+  [data-hero-chip]{position:relative !important;left:auto !important;bottom:auto !important;margin:-14px 14px 0;max-width:none !important}
+  [data-metric]{padding:22px 16px !important}
+  [data-metric] > div:first-child{font-size:32px !important}
+  [data-metric] > div:last-child{font-size:13px !important}
+  [data-team-body]{padding:28px 22px !important}
+  [data-team-card] > div:first-child{min-height:220px !important}
+  [data-cta-input], [data-cta-btn]{flex:1 1 100% !important;width:100%}
+  #demo > div{padding:36px 24px !important;border-radius:24px !important}
+  #demo{padding-bottom:64px !important}
   [data-desktop-nav]{display:none !important}
+  [data-chat] [data-chat-item][style*="gap:14px"]{flex-direction:column;align-items:flex-start !important;gap:8px !important}
+  [data-card-stats]{gap:8px !important}
+  [data-card-stats] > div{padding:10px 9px !important}
+  [data-card-stats] > div > div:last-child{white-space:nowrap;font-size:14px !important}
+  [data-captions]{display:grid !important;bottom:5vh !important;padding:0 16px !important}
+  [data-captions] > div{grid-area:1 / 1;justify-self:center}
   [data-menu-btn]{display:block !important}
   [data-header-cta]{padding:9px 14px !important;font-size:13px !important}
   header > div:first-child{padding:12px 16px !important;gap:12px !important}
@@ -55,6 +81,13 @@ section[id]{scroll-margin-top:72px}
   [data-menu="open"] [data-bar="1"]{transform:translateY(4px) rotate(45deg)}
   [data-menu="open"] [data-bar="2"]{transform:translateY(-4px) rotate(-45deg)}
 }
+@media (max-width: 359px){
+  [data-header-cta]{display:none !important}
+  [data-hero-stats] > div > div:first-child{font-size:17px !important}
+  [data-menu-cta]{display:block !important}
+  [data-card-stats] > div > div:first-child{font-size:10px !important}
+  [data-card-stats] > div > div:last-child{font-size:13px !important}
+}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}[data-nav-pill],[data-nav-line],[data-bar],[data-menu-panel],[data-menu-panel] a{transition:none !important}}
 @keyframes scanline{0%,100%{transform:translateY(0)}50%{transform:translateY(72px)}}
 [data-scanline]{animation:scanline 3.6s ease-in-out infinite}
@@ -67,9 +100,9 @@ section[id]{scroll-margin-top:72px}
 <!-- NAV -->
 <header ref="{{ headerRef }}" data-menu="{{ menuState }}" style="position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(7,9,12,0.72);border-bottom:1px solid rgba(255,255,255,0.06)">
   <div style="max-width:1240px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px">
-    <a href="#top" style="display:flex;align-items:center;gap:10px;color:#EEF1F4">
+    <a href="#top" style="display:flex;align-items:center;gap:10px;color:#EEF1F4;min-width:0">
       <span style="width:26px;height:26px;border-radius:50%;border:2px solid #F2B544;display:grid;place-items:center"><span style="width:8px;height:8px;border-radius:50%;background:#F2B544"></span></span>
-      <span style="font-weight:600;font-size:17px;letter-spacing:-0.01em">SpartansE-V</span>
+      <span style="font-weight:600;font-size:17px;letter-spacing:-0.01em;white-space:nowrap">SpartansE-V</span>
     </a>
     <nav ref="{{ navRef }}" data-desktop-nav style="position:relative;display:flex;gap:8px;font-size:14px;flex-wrap:wrap">
       <span data-nav-pill aria-hidden="true" style="position:absolute;left:0;top:0;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);opacity:0;pointer-events:none"></span>
@@ -93,6 +126,7 @@ section[id]{scroll-margin-top:72px}
       <a href="#platform" data-mnav="platform" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:space-between;padding:15px 4px;font-size:17px;font-weight:500;color:#C8CFD7;border-bottom:1px solid rgba(255,255,255,0.06)">Platform<span style="font-family:'Geist Mono',monospace;font-size:11px;color:#5C6570">02</span></a>
       <a href="#results" data-mnav="results" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:space-between;padding:15px 4px;font-size:17px;font-weight:500;color:#C8CFD7;border-bottom:1px solid rgba(255,255,255,0.06)">Results<span style="font-family:'Geist Mono',monospace;font-size:11px;color:#5C6570">03</span></a>
       <a href="#team" data-mnav="team" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:space-between;padding:15px 4px;font-size:17px;font-weight:500;color:#C8CFD7">Team<span style="font-family:'Geist Mono',monospace;font-size:11px;color:#5C6570">04</span></a>
+      <a href="#demo" data-menu-cta onClick="{{ closeMenu }}" style="display:none;margin-top:10px;text-align:center;background:#F2B544;color:#0A0C10;font-weight:600;font-size:15px;padding:14px 18px;border-radius:999px">Request a demo</a>
     </nav>
   </div>
 </header>
@@ -115,7 +149,7 @@ section[id]{scroll-margin-top:72px}
           Watch the 3-min demo
         </a>
       </div>
-      <div data-reveal data-delay="320" style="display:flex;gap:32px;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07)">
+      <div data-reveal data-delay="320" data-hero-stats style="display:flex;gap:32px;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07)">
         <div style="padding-top:18px"><div style="font-size:28px;font-weight:600;letter-spacing:-0.02em">±<span data-count="3.8" data-dec="1">3.8</span> days</div><div style="font-size:13px;color:#8C96A2;margin-top:4px">wear-to-limit accuracy</div></div>
         <div style="padding-top:18px"><div style="font-size:28px;font-weight:600;letter-spacing:-0.02em"><span data-count="43">43</span> landings</div><div style="font-size:13px;color:#8C96A2;margin-top:4px">of early warning</div></div>
         <div style="padding-top:18px"><div style="font-size:28px;font-weight:600;letter-spacing:-0.02em">Zero</div><div style="font-size:13px;color:#8C96A2;margin-top:4px">changes to AMM limits</div></div>
@@ -125,12 +159,12 @@ section[id]{scroll-margin-top:72px}
     <!-- hero product card -->
     <div ref="{{ heroCardRef }}" style="position:relative;will-change:transform">
       <div data-reveal="soft" data-delay="300" style="border-radius:24px;border:1px solid rgba(255,255,255,0.09);background:linear-gradient(180deg,#10141A,#0B0E13);padding:24px;box-shadow:0 40px 120px -30px rgba(0,0,0,0.8)">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div data-card-head style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
           <div>
             <div style="font-family:'Geist Mono',monospace;font-size:12px;color:#8C96A2;letter-spacing:0.04em">VN-A300 · MAIN GEAR · POS 3</div>
             <div style="font-size:22px;font-weight:600;margin-top:6px;letter-spacing:-0.01em">38 landings remaining</div>
           </div>
-          <span style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:#F5D48F;background:rgba(242,181,68,0.12);padding:6px 12px;border-radius:999px"><span style="width:7px;height:7px;border-radius:50%;background:#F2B544;animation:pulse 1.8s infinite"></span>Schedule swap</span>
+          <span style="flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:#F5D48F;background:rgba(242,181,68,0.12);padding:6px 12px;border-radius:999px"><span style="width:7px;height:7px;border-radius:50%;background:#F2B544;animation:pulse 1.8s infinite"></span>Schedule swap</span>
         </div>
         <svg data-chart viewBox="0 0 400 190" style="width:100%;height:auto;margin-top:22px;display:block">
           <line x1="0" y1="160" x2="400" y2="160" stroke="#F2706A" stroke-width="1" stroke-dasharray="4 4"></line>
@@ -145,13 +179,13 @@ section[id]{scroll-margin-top:72px}
           <circle data-pop cx="250" cy="95" r="5" fill="#EEF1F4"></circle>
           <circle data-pop cx="360" cy="160" r="5" fill="#F2B544"></circle>
         </svg>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px">
+        <div data-card-stats style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px">
           <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:12px"><div style="font-size:11px;color:#8C96A2">Earliest credible</div><div style="font-size:15px;font-weight:600;margin-top:4px">Oct 07</div></div>
           <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:12px"><div style="font-size:11px;color:#8C96A2">Most likely</div><div style="font-size:15px;font-weight:600;margin-top:4px">Oct 12</div></div>
           <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:12px"><div style="font-size:11px;color:#8C96A2">Spare at SGN</div><div style="font-size:15px;font-weight:600;margin-top:4px;color:#7FE0A8">In stock</div></div>
         </div>
       </div>
-      <div data-reveal="left" data-delay="1100" style="position:absolute;left:-28px;bottom:-26px;display:flex;align-items:center;gap:12px;background:#151A21;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:12px 16px;box-shadow:0 20px 50px -10px rgba(0,0,0,0.7);max-width:290px">
+      <div data-reveal="left" data-delay="1100" data-hero-chip style="position:absolute;left:-28px;bottom:-26px;display:flex;align-items:center;gap:12px;background:#151A21;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:12px 16px;box-shadow:0 20px 50px -10px rgba(0,0,0,0.7);max-width:290px">
         <span style="width:34px;height:34px;flex:none;border-radius:10px;background:rgba(242,112,106,0.15);display:grid;place-items:center;color:#F2706A;font-weight:700">!</span>
         <div style="font-size:13px;line-height:1.4"><div style="font-weight:600">Cut detected · Pos 2</div><div style="color:#8C96A2">No dispatch relief — replace tonight</div></div>
       </div>
@@ -170,7 +204,7 @@ section[id]{scroll-margin-top:72px}
       <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#5CCFE6">A320 · 6 WHEELS · ONE FORECAST</div>
       <h2 ref="{{ titleRef }}" style="margin:14px auto 0;max-width:820px;font-size:clamp(34px,5vw,64px);line-height:1.02;letter-spacing:-0.035em;font-weight:600;text-wrap:balance;will-change:transform,opacity">Every wheel on every aircraft, tracked landing by landing.</h2>
     </div>
-    <div style="position:absolute;bottom:9vh;left:0;right:0;display:flex;justify-content:center;gap:clamp(16px,4vw,64px);flex-wrap:wrap;padding:0 28px">
+    <div data-captions style="position:absolute;bottom:9vh;left:0;right:0;display:flex;justify-content:center;gap:clamp(16px,4vw,64px);flex-wrap:wrap;padding:0 28px">
       <div ref="{{ cap1Ref }}" style="opacity:0;display:flex;align-items:center;gap:10px;background:rgba(13,16,21,0.8);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:10px 18px;font-size:14px;will-change:transform,opacity"><span style="width:8px;height:8px;border-radius:50%;background:#7FE0A8"></span>Nose gear · 2 wheels healthy</div>
       <div ref="{{ cap2Ref }}" style="opacity:0;display:flex;align-items:center;gap:10px;background:rgba(13,16,21,0.8);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:10px 18px;font-size:14px;will-change:transform,opacity"><span style="width:8px;height:8px;border-radius:50%;background:#F2B544"></span>Main gear pos 3 · swap Oct 06</div>
       <div ref="{{ cap3Ref }}" style="opacity:0;display:flex;align-items:center;gap:10px;background:rgba(13,16,21,0.8);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:10px 18px;font-size:14px;will-change:transform,opacity"><span style="width:8px;height:8px;border-radius:50%;background:#F2706A"></span>Main gear pos 2 · replace tonight</div>
@@ -206,7 +240,7 @@ section[id]{scroll-margin-top:72px}
 <!-- AGENT -->
 <section id="agent" style="max-width:1240px;margin:0 auto;padding:96px 28px">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:56px;align-items:start">
-    <div data-stagger="80" style="display:flex;flex-direction:column;gap:22px;position:sticky;top:110px">
+    <div data-stagger="80" data-agent-col style="display:flex;flex-direction:column;gap:22px;position:sticky;top:110px">
       <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#5CCFE6">THE MAINTENANCE AGENT</div>
       <h2 style="margin:0;font-size:clamp(32px,4vw,52px);line-height:1.05;letter-spacing:-0.03em;font-weight:600;text-wrap:balance">Just ask. It investigates, decides, and drafts the work order.</h2>
       <p style="margin:0;font-size:17px;line-height:1.6;color:#A7B0BB;text-wrap:pretty">Your engineers talk to SpartansE-V in plain language. The agent checks wear forecasts, tire scans, dispatch rules and spares on its own — then tells you exactly what to do, and shows its work.</p>
@@ -223,7 +257,7 @@ section[id]{scroll-margin-top:72px}
     </div>
 
     <div data-reveal="soft" data-delay="150" style="border-radius:24px;border:1px solid rgba(255,255,255,0.09);background:#0D1015;overflow:hidden">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;padding:16px 22px;border-bottom:1px solid rgba(255,255,255,0.07)">
         <div style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500"><span style="width:8px;height:8px;border-radius:50%;background:#7FE0A8"></span>Engineer Chat</div>
         <div style="font-family:'Geist Mono',monospace;font-size:12px;color:#8C96A2">SGN · Line Maintenance</div>
       </div>
@@ -333,10 +367,10 @@ section[id]{scroll-margin-top:72px}
       <p style="margin:0;font-size:16px;line-height:1.6;color:#A7B0BB;text-wrap:pretty">Validated on 257 held-out tires across a full pilot fleet. Built as decision support: SpartansE-V prioritizes within your existing AMM removal limits and never replaces mandated inspections.</p>
     </div>
     <div data-reveal="soft" data-delay="150" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:rgba(255,255,255,0.07);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07)">
-      <div style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em;color:#F2B544"><span data-count="3.8" data-dec="1">3.8</span><span style="font-size:0.45em;color:#EEF1F4"> days</span></div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">average error on wear-to-limit date, 30 days out</div></div>
-      <div style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em"><span data-count="2">2</span>×</div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">more accurate than standard ML baselines late in tire life</div></div>
-      <div style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em"><span data-count="98">98</span>%+</div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">accuracy reading messy free-text defect logs</div></div>
-      <div style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em">±<span data-count="0.23" data-dec="2">0.23</span><span style="font-size:0.45em"> mm</span></div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">tread depth measured from a single photo</div></div>
+      <div data-metric style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em;white-space:nowrap;color:#F2B544"><span data-count="3.8" data-dec="1">3.8</span><span style="font-size:0.45em;color:#EEF1F4"> days</span></div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">average error on wear-to-limit date, 30 days out</div></div>
+      <div data-metric style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em;white-space:nowrap"><span data-count="2">2</span>×</div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">more accurate than standard ML baselines late in tire life</div></div>
+      <div data-metric style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em;white-space:nowrap"><span data-count="98">98</span>%+</div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">accuracy reading messy free-text defect logs</div></div>
+      <div data-metric style="background:#0D1015;padding:30px 26px"><div style="font-size:clamp(36px,4vw,52px);font-weight:600;letter-spacing:-0.03em;white-space:nowrap">±<span data-count="0.23" data-dec="2">0.23</span><span style="font-size:0.45em"> mm</span></div><div style="font-size:14px;color:#A7B0BB;margin-top:8px;line-height:1.45">tread depth measured from a single photo</div></div>
     </div>
   </div>
 </section>
@@ -344,12 +378,12 @@ section[id]{scroll-margin-top:72px}
 <!-- TEAM -->
 <sc-if value="{{ showTeam }}" hint-placeholder-val="{{ true }}">
 <section id="team" style="max-width:1240px;margin:0 auto;padding:40px 28px 96px">
-  <div data-reveal="soft" style="border-radius:28px;border:1px solid rgba(255,255,255,0.07);background:#0D1015;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
+  <div data-reveal="soft" data-team-card style="border-radius:28px;border:1px solid rgba(255,255,255,0.07);background:#0D1015;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
     <div style="position:relative;min-height:340px;overflow:hidden;background:#10141A">
       <img src="./team.webp" alt="Team SpartansE-V holding the Aviation Track Winner board at Agentic AI Build Week 2026, Ho Chi Minh City" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.025)">
       <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,16,21,0) 70%,rgba(13,16,21,0.55));pointer-events:none"></div>
     </div>
-    <div style="padding:44px;display:flex;flex-direction:column;gap:20px;justify-content:center">
+    <div data-team-body style="padding:44px;display:flex;flex-direction:column;gap:20px;justify-content:center">
       <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#F2B544">BUILT BY SPARTANSE-V</div>
       <h3 style="margin:0;font-size:32px;line-height:1.1;letter-spacing:-0.02em;font-weight:600;text-wrap:balance">Aviation Track winners, Agentic AI Build Week.</h3>
       <p style="margin:0;font-size:16px;line-height:1.6;color:#A7B0BB">Six engineers across ML, computer vision and aviation maintenance, building the tools line crews actually want to use.</p>
@@ -371,9 +405,9 @@ section[id]{scroll-margin-top:72px}
     <div style="position:relative;display:flex;flex-direction:column;gap:20px">
       <p style="margin:0;font-size:17px;line-height:1.55;color:#2A2410">Run a 60-day pilot on one station with your own inspection history. We'll show you the AOG events you would have avoided.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <input ref="{{ emailRef }}" type="email" name="email" autocomplete="email" aria-label="Work email" placeholder="Work email" onKeyDown="{{ onEmailKey }}" style="flex:1;min-width:200px;font:inherit;font-size:15px;padding:15px 20px;border-radius:999px;border:1px solid rgba(10,12,16,0.2);background:rgba(255,255,255,0.55);color:#0A0C10;outline:none" style-focus="border-color:rgba(10,12,16,0.55);background:rgba(255,255,255,0.75)">
+        <input data-cta-input ref="{{ emailRef }}" type="email" name="email" autocomplete="email" aria-label="Work email" placeholder="Work email" onKeyDown="{{ onEmailKey }}" style="flex:1;min-width:200px;font:inherit;font-size:15px;padding:15px 20px;border-radius:999px;border:1px solid rgba(10,12,16,0.2);background:rgba(255,255,255,0.55);color:#0A0C10;outline:none" style-focus="border-color:rgba(10,12,16,0.55);background:rgba(255,255,255,0.75)">
         <input ref="{{ hpRef }}" name="company" tabIndex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;clip-path:inset(50%)">
-        <button onClick="{{ submitContact }}" disabled="{{ contactBusy }}" style="font:inherit;border:0;cursor:pointer;background:#0A0C10;color:#EEF1F4;font-weight:600;font-size:15px;padding:15px 26px;border-radius:999px" style-hover="background:#1C2129;color:#FFFFFF">{{ contactLabel }}</button>
+        <button data-cta-btn onClick="{{ submitContact }}" disabled="{{ contactBusy }}" style="font:inherit;border:0;cursor:pointer;background:#0A0C10;color:#EEF1F4;font-weight:600;font-size:15px;padding:15px 26px;border-radius:999px" style-hover="background:#1C2129;color:#FFFFFF">{{ contactLabel }}</button>
       </div>
       <div aria-live="polite" style="min-height:21px;margin-top:-8px;font-size:14px;font-weight:500;color:#0A0C10">{{ contactMsg }}</div>
       <div style="font-size:14px;color:#2A2410">Or email us at <a href="mailto:admin@aerotrace-intelligence.com" style="color:#0A0C10;font-weight:600;text-decoration:underline" style-hover="color:#0A0C10">admin@aerotrace-intelligence.com</a></div>
@@ -613,8 +647,9 @@ class Component extends DCLogic {
     const el = n => this.refs[n] && this.refs[n].current;
     const y = window.scrollY, vh = window.innerHeight;
     const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const small = window.innerWidth <= 760;
     if (el('glowRef')) el('glowRef').style.transform = `translate3d(0,${y * 0.35}px,0)`;
-    if (el('heroCardRef')) el('heroCardRef').style.transform = `translate3d(0,${y * -0.08}px,0) rotate(${y * -0.004}deg)`;
+    if (el('heroCardRef')) el('heroCardRef').style.transform = small ? 'none' : `translate3d(0,${y * -0.08}px,0) rotate(${y * -0.004}deg)`;
     this.spyNav();
     if (this.navActive && this.navLine) {
       const a = this.navLinks.find(l => l.dataset.nav === this.navActive);
@@ -631,9 +666,13 @@ class Component extends DCLogic {
     if (el('gridRef')) el('gridRef').style.transform = `translate3d(0, ${p * -160}px, 0)`;
     const t = el('titleRef');
     if (t) { const o = 1 - clamp((p - 0.1) / 0.14); t.style.opacity = o; t.style.transform = `translate3d(0, ${p * -80}px, 0)`; }
+    const starts = [0.5, 0.64, 0.8];
+    const latest = starts.reduce((acc, s0, i) => (p >= s0 ? i : acc), -1);
     ['cap1Ref', 'cap2Ref', 'cap3Ref'].forEach((k, i) => {
       const c = el(k); if (!c) return;
-      const o = clamp((p - [0.5, 0.64, 0.8][i]) / 0.05);
+      let o = clamp((p - starts[i]) / 0.05);
+      // phones stack captions in one spot: only the newest one stays visible
+      if (small && i < latest) o *= 1 - clamp((p - starts[latest]) / 0.05);
       c.style.opacity = o; c.style.transform = `translate3d(0, ${(1 - o) * 24}px, 0)`;
     });
   }
