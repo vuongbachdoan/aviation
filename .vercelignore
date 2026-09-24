@@ -1,0 +1,7 @@
+.env
+.env.*
+!.env.example
+server.py
+email-preview.html
+__pycache__/
+*.zip

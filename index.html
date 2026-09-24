@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Backend endpoint for "Book a pilot". Use a full URL (https://api.example.com/api/contact) when the API runs on another domain. -->
+<meta name="contact-endpoint" content="/api/contact">
 <script src="./support.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
 <script type="module" src="./plane3d.js"></script>
@@ -408,7 +410,8 @@ class Component extends DCLogic {
     }
     this.setState({ contact: 'sending', contactMsg: '' });
     try {
-      const res = await fetch('/api/contact', {
+      const endpoint = (document.querySelector('meta[name="contact-endpoint"]') || {}).content || '/api/contact';
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, company: (hp && hp.value) || '', page: location.href })
