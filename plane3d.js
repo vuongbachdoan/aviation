@@ -1,4 +1,4 @@
-// Aerotrace flight scene: A320 GLB + procedural landing gear, scroll-driven
+// SpartansE-V flight scene: A320 GLB + procedural landing gear, scroll-driven
 // camera that dives onto the main gear and reveals tire wear / damage.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -312,7 +312,7 @@ function mount(host) {
 
     const scanning = p > 0.43 && p < 0.6;
     status.style.opacity = (Math.sin(Math.PI * clamp((p - 0.42) / 0.2))).toFixed(3);
-    status.textContent = p < 0.53 ? 'AEROTRACE VISION · SCANNING 6 WHEELS…' : '6 / 6 SCANNED · 2 FLAGGED';
+    status.textContent = p < 0.53 ? 'SPARTANSE-V VISION · SCANNING 6 WHEELS…' : '6 / 6 SCANNED · 2 FLAGGED';
 
     tagsEl.querySelectorAll('[data-tag]').forEach(el => {
       const k = el.dataset.tag, w = wheels[k], below = k === '2' || k === '3' || k === 'NR';
